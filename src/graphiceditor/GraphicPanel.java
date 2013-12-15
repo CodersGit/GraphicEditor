@@ -362,7 +362,11 @@ public class GraphicPanel extends JPanel {
 			StackElem NowIsNew = stack.remove(stack.size() - 1);
 			if ((NowIsNew.x<0 || NowIsNew.y<0 || NowIsNew.x>=xSize || NowIsNew.y>=ySize))
 				continue;
-			if(image.getRGB(NowIsNew.x, NowIsNew.y) != color1) continue;
+			int color2 = image.getRGB(NowIsNew.x, NowIsNew.y);
+			int c1 = (color1 & 0xFF) - (color2 & 0xFF);
+			int c2 = ((color1>>8) & 0xFF) - ((color2>>8) & 0xFF);
+			int c3 = ((color1>>16) & 0xFF) - ((color2>>16) & 0xFF);
+			if((Math.abs(c1) + Math.abs(c2) + Math.abs(c3) > 30)) continue;
 		//	System.out.println("debug " + NowIsNew.x + " " + NowIsNew.y);
 			image.setRGB(NowIsNew.x, NowIsNew.y, color.getRGB());
 			StackElem NowIsNew1 = new StackElem();
@@ -382,9 +386,9 @@ public class GraphicPanel extends JPanel {
 			NowIsNew4.y = NowIsNew.y - 1;
 			stack.add(NowIsNew4);
 			// TODO
-			this.repaint();
 			NowIsNew = null;
 		}
+		this.repaint();
 	}
 
 	public void open() {
